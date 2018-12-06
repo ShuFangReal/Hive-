@@ -1,0 +1,67 @@
+//创建库
+create database if not exists helloworld
+COMMENT "helloworld"
+with dbproperties ("name" = 'hello')
+location '/xxxx.txt';
+
+alter database helloworld set dbproperties ();
+drop database helloworld ;
+//直接命令行操作
+bin/hive -e/f 'sql语句'
+
+///创建表
+create table if not EXISTS student(id int ,name string)
+patitioned by (month string ,day string)
+clustered by ()
+sorted by ()
+stored as ORC/PARQUET
+row format delimited fields terminated by '\t'
+collection items terminated by '_'
+map keys terminated by ':'
+lines terminated by '\n'
+location 'hdfs_path,必须时目录的路径，因为表在hdfs上是以目录的结构存在的';
+
+//分区表插入数据或者修改都必须在表名后面声明分区
+
+//修改表结构
+alter table student set tblproperties ('EXTERNAL '= 'TRUE')
+alter table student add partition (month = '',day = '')
+insert into table student partition(month = '') values (),()
+load data local inpath '/xxxxx/xxxx/.txt' into table student patition(month = '')
+import table student partition ()from '/hdfs_path'
+export table student to 'hdfs_path'
+
+ alter table student change COLUMN col1 newcol1name INT
+
+ alter table student add COLUMNs (col1 string ),(col2 int)
+
+ alter table student replace columns (c int )(c1 string)( c2 DOUBLE )
+
+
+//插入数据到 表中有5中 方法  insert into table student values (),()
+insert into table student select  * from student1
+
+  location 'hdfs_path'
+
+  create .......as select * from student1 ;
+
+  import table student from '/hdfs_path'
+
+  load data local inpath '/opt/modul/xxxxx.txt' into table student partition (month = 1)
+
+
+//导出数据有4种
+bin/hive  -d/f  'select * from student ' > '/opt/module/datas/xxx.txt'
+
+insert overwrite local directory '/ / muluming '
+row format delimited fields terminated by '\t'
+select * from student ;
+
+export table student to 'hdfs_path';
+
+sqoop 导出
+
+//清空表
+truncate table student;
+
+
